@@ -1,0 +1,34 @@
+alias t := test
+alias ti := test-integration
+alias tu := test-unit
+alias l := lint
+alias rdi := run-data-ingestor
+
+# Lists all available tasks
+default:
+    @just --list
+
+# Creates setup necessary to run the integration tests. It'll replace your .env file with the example.env one. This will take some time if first time.
+run-data-ingestor:
+    cp example.env .env
+    go run cmd/data-ingestor/main.go
+
+# Run all tests, or any tests specified by the path with its extra parameters
+test path="./..." *params="":
+    go test {{path}} -race {{params}}
+
+# Runs all tests located at ./test
+test-integration *params:
+    @just test ./test/... -timeout 300s {{params}}
+
+# Runs all tests, except integration tests located at ./test
+test-unit *params:
+    go test -p 2 $(go list ./... | grep -v ./test) -race {{params}}
+
+# Clears the test cache
+clear-cache:
+    go clean -testcache
+
+# Formats all go files
+lint:
+    go fmt ./...

@@ -1,0 +1,2 @@
+# Will be used to configure application feature flags
+ff_test_feature_flag: false
