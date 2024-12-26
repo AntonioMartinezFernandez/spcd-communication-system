@@ -1,0 +1,5 @@
+include:
+  - compose-kafka.yml
+  - compose-redis.yml
+  - compose-cockroachdb.yml
+  - compose-minio.yml
